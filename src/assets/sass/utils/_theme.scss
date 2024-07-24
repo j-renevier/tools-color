@@ -1,0 +1,19 @@
+@use './color' as color;
+@use './image' as image;
+
+@mixin themed($themes, $prefix: '') {
+  @if $prefix != '' {
+    $prefix: $prefix + '-';
+  }
+
+  @each $theme, $map in $themes {
+    [theme="#{$theme}"] {
+      @each $key, $value in $map {
+        --#{$prefix}#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+@include themed(color.$themes, 'color');
+@include themed(image.$themes, 'image');

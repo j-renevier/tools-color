@@ -1,0 +1,88 @@
+*, *:before, *:after{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body{
+  line-height: 1.5;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+a {
+  text-decoration: none;
+  color: currentcolor;
+  text-decoration-skip-ink: auto;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol{
+  list-style: none; 
+}
+
+blockquote, q{
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after{
+  content: '';
+  content: none;
+}
+
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:target {
+  scroll-margin-block: 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  color: var(--color-);
+}
+

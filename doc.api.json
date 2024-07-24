@@ -1,0 +1,366 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Mike - Suits API",
+    "description": "API Suits app documentation",
+    "termsOfService": "https://github.com/j-renevier/suits?tab=readme-ov-file",
+    "contact": {
+      "email": "mike@suits.st"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://github.com/j-renevier/suits?tab=MIT-1-ov-file"
+    },
+    "version": "0.0.1"
+  },
+  "externalDocs":
+  {
+    "description": "Find out more about Suits",
+    "url": "https://github.com/j-renevier/suits"
+  },
+  "servers": [
+    {
+      "description": "Local",
+      "url": "{protocole}://localhost{port}{root}{version}",
+      "variables": {
+        "Protocole": {
+          "default": "http",
+          "enum": [
+            "http",
+            "https"
+          ],
+          "description": "Protocole de communication"
+        },
+        "Port": {
+          "default": ":3000",
+          "enum": [
+            ":3000",
+            ":81"
+          ],
+          "description": "Port"
+        },
+        "Root": {
+          "default": "/api",
+          "enum": ["/api"],
+          "description": "Root API path"
+        },
+        "Version": {
+          "default": "",
+          "enum": [
+            "",
+            "/v1"
+          ],
+          "description": "API version"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "hello",
+      "description": "",
+      "externalDocs": {
+        "description": "Source code",
+        "url": "https://github.com/j-renevier/mike"
+      }
+    }
+  ],
+  "paths": {
+    "/hello": {
+      "get": {
+        "tags": [
+          "hello"
+        ],
+        "summary": "Get hello message",
+        "description": "Get first hello message",
+        "operationId": "getFirstHelloMessage",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/hello"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          },
+          "406": {
+            "$ref": "#/components/responses/NotAcceptable"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "default": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+
+    "schemas": {
+
+      "hello": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 11
+          },
+          "message": {
+            "type": "string",
+            "example": "hello"
+          }
+        },
+        "xml": {
+          "name": "hello"
+        }
+      },
+
+      "Error": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      }
+      
+    },
+
+    "headers": {
+      "StatusCodeBadRequest": {
+        "description": "Requête est erronée",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "400 Bad Request"
+        }    
+      },
+      "StatusCodeUnauthorized": {
+        "description": "Une authentification est nécessaire pour accéder à la ressource",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "401 Unauthorized"
+        }    
+      },
+      "StatusCodeForbidden": {
+        "description": "Le serveur a compris la requête, mais refuse de l'exécuter",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "403 Forbidden"
+        }    
+      },
+      "StatusCodeNotFound": {
+        "description": "Ressource non trouvée",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "404 Not Found"
+        }
+      },
+      "StatusCodeMethodNotAllowed": {
+        "description": "Méthode de requête non autorisée",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "405 Method Not Allowed"
+        }    
+      },
+      "StatusCodeNotAcceptable": {
+        "description": "La ressource demandée n'est pas disponible dans un format qui respecterait les en-têtes",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "406 Not Acceptable"
+        }    
+      },
+      "StatusCodeInternalServerError": {
+        "description": "Erreur interne du serveur",
+        "schema": {
+          "type": "integer",
+          "description": "Erreur code - erreur message",
+          "example": "500 Internal Server Error"
+        }    
+      }
+    },
+    
+
+    
+
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeBadRequest"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeUnauthorized"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeForbidden"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeNotFound"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "MethodNotAllowed": {
+        "description": "Method Not Allowed",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeMethodNotAllowed"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotAcceptable": {
+        "description": "Not Acceptable",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeNotAcceptable"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal Server Error",
+        "headers": {
+          "Status Code": {
+            "$ref": "#/components/headers/StatusCodeInternalServerError"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
