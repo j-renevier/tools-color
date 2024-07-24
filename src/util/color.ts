@@ -1,26 +1,4 @@
-const isValidOctet = (value: any):boolean => {
-  return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 255
-};
-
-const isValidPercentage = (value: any):boolean => {
-  return typeof value === 'number' && value >= 0 && value <= 100;
-};
-
-const isValidfract = (value: any):boolean => {
-  return typeof value === 'number' && value >= 0 && value <= 1;
-};
-
-const isValidHexa = (value:any):boolean => {
-  // Expression régulière pour un octet hexadécimal (2 caractères hexadécimaux)
-  const HexaRegex = /^[0-9A-Fa-f]{2}$/;
-  if (typeof value === 'string' && HexaRegex.test(value)){
-    const hexa = parseInt(value, 16)
-    return typeof hexa === 'number' && hexa >= 0 && hexa <= 255;
-  } else if (typeof value === 'number'){
-    return value >= 0 && value <= 255;
-  }
-  return false; 
-};
+import { Frac, Hue, IHSL, IRGB, isIHSL, isIRGB, Octet, Perc, TFrac, TOctet } from "./colorType";
 
 const hexa2String = (value:number):string => {
   return value.toString(16);
@@ -92,31 +70,71 @@ function hslToRgb(h, s, l) {
 }
 
 
+
+
+
 class Color {
+  private red: Octet = new Octet(255);
+  private green: Octet = new Octet(255);
+  private blue: Octet = new Octet(255);
+  private alpha: Frac = new Frac(1);
 
-  private red: number = 255;
-  private green: number = 255;
-  private bleu: number = 255;
-  private alpha: number = 1 ;
+  constructor(color: string | IRGB | IHSL) {
+    try {
+      if (typeof color === 'string'){
 
-  constructor( r, g, b ) {
+      } else if (isIRGB(color)) {
+        this.red = this.toOctet(color.r);
+        this.green = this.toOctet(color.g);
+        this.blue = this.toOctet(color.b);
+        this.alpha = color.a !== undefined ? this.toFrac(color.a) : new Frac(1);
+  
+      } else if (isIHSL(color)){
+  
+      } else {
+        throw new Error('Invalid value type');
+      }
+    } catch (error) {
 
-		this.isColor = true;
-
-		this.r = 1;
-		this.g = 1;
-		this.b = 1;
-
-		return this.set( r, g, b );
-
+    }
+    
 	}
 
+   
+  private toOctet(value: any): Octet{
+    try {
+      if (value instanceof Octet){
+        return value
+      }
+      return new Octet(value);
+    } catch (error) {
+      throw new Error('Invalid value type');
+    }
+  }
 
-
-
-
-
-
-
-
+  private toFrac(value: any): Frac{
+    try {
+      if (value instanceof Frac){
+        return value
+      } else if (value instanceof Perc){
+        return new Frac(value.perc / 100)
+      } else if (typeof value === 'string') {
+        return new Frac(value);
+      }
+      return new Frac(value);
+    } catch (error) {
+      throw new Error('Invalid value type');
+    }
+  }
 }
+
+
+const hexa2String = (value:number):string => {
+  return value.toString(16);
+}
+
+const string2Hexa = (value:string):number => {
+  return parseInt(value, 16);
+}
+
+
