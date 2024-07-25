@@ -10,24 +10,42 @@ class Color {
     try {
       if (typeof color === 'string'){
         color = color.toLowerCase().trim().replaceAll(' ', ''); 
-
         if (color.slice(4) === "rgba"){
-          let value = color.slice(5, -1)
+          let value = color.slice(5, -1).split(',');
           this.red = this.toOctet(value[0]);
           this.green = this.toOctet(value[1]);
           this.blue = this.toOctet(value[2]);
           this.alpha = this.toFrac(value[3]);
-
         } else if (color.slice(4) === "hsla"){
-
+          let value = color.slice(5, -1).split(',');
+          const h = this.toHue(value[0]);
+          const s = this.toPerc(value[1]);
+          const l = this.toPerc(value[2]);
+          const rgb = this.hslToRgb(h, s, l);
+          this.red = rgb.red;
+          this.green = rgb.green;
+          this.blue = rgb.blue;
+          this.alpha = this.toFrac(value[3]);
         } else if (color.slice(3) === "rgb"){
-
+          let value = color.slice(5, -1).split(',');
+          this.red = this.toOctet(value[0]);
+          this.green = this.toOctet(value[1]);
+          this.blue = this.toOctet(value[2]);
         } else if (color.slice(3) === "hsl"){
-
+          let value = color.slice(5, -1).split(',');
+          const h = this.toHue(value[0]);
+          const s = this.toPerc(value[1]);
+          const l = this.toPerc(value[2]);
+          const rgb = this.hslToRgb(h, s, l);
+          this.red = rgb.red;
+          this.green = rgb.green;
+          this.blue = rgb.blue;
         } else if (color.slice(1) === "#"){
-
+          this.red = this.toOctet(color.slice(1, 3));
+          this.green = this.toOctet(color.slice(3, 5));
+          this.blue = this.toOctet(color.slice(5, 7));
+          this.alpha = color.slice(7,9)? this.toFrac(color.slice(7,9)): new Frac(1);
         }
-
       } else if (isIRGB(color)) {
         this.red = this.toOctet(color.r);
         this.green = this.toOctet(color.g);
