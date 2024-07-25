@@ -1,78 +1,5 @@
 import { Frac, Hue, IHSL, IRGB, isIHSL, isIRGB, Octet, Perc, TFrac, TOctet } from "./colorType";
 
-const hexa2String = (value:number):string => {
-  return value.toString(16);
-}
-
-const string2Hexa = (value:string):number => {
-  return parseInt(value, 16);
-}
-
-function rgbToHsl(r: number, g, b) {
-  r /= 255, g /= 255, b /= 255;
-
-  var max = Math.max(r, g, b), min = Math.min(r, g, b);
-  var h, s, l = (max + min) / 2;
-
-  if (max == min) {
-    h = s = 0; // achromatic
-  } else {
-    var d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-
-    h /= 6;
-  }
-
-  return [ h, s, l ];
-}
-
-/**
- * Converts an HSL color value to RGB. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
- * Assumes h, s, and l are contained in the set [0, 1] and
- * returns r, g, and b in the set [0, 255].
- *
- * @param   Number  h       The hue
- * @param   Number  s       The saturation
- * @param   Number  l       The lightness
- * @return  Array           The RGB representation
- */
-function hslToRgb(h, s, l) {
-  var r, g, b;
-
-  if (s == 0) {
-    r = g = b = l; // achromatic
-  } else {
-    function hue2rgb(p, q, t) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-      return p;
-    }
-
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
-
-    r = hue2rgb(p, q, h + 1/3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
-  }
-
-  return [ r * 255, g * 255, b * 255 ];
-}
-
-
-
-
-
 class Color {
   private red: Octet = new Octet(255);
   private green: Octet = new Octet(255);
@@ -82,24 +9,92 @@ class Color {
   constructor(color: string | IRGB | IHSL) {
     try {
       if (typeof color === 'string'){
+        color = color.toLowerCase().trim().replaceAll(' ', ''); 
+
+        if (color.slice(4) === "rgba"){
+          let value = color.slice(5, -1)
+          this.red = this.toOctet(value[0]);
+          this.green = this.toOctet(value[1]);
+          this.blue = this.toOctet(value[2]);
+          this.alpha = this.toFrac(value[3]);
+
+        } else if (color.slice(4) === "hsla"){
+
+        } else if (color.slice(3) === "rgb"){
+
+        } else if (color.slice(3) === "hsl"){
+
+        } else if (color.slice(1) === "#"){
+
+        }
 
       } else if (isIRGB(color)) {
         this.red = this.toOctet(color.r);
         this.green = this.toOctet(color.g);
         this.blue = this.toOctet(color.b);
         this.alpha = color.a !== undefined ? this.toFrac(color.a) : new Frac(1);
-  
       } else if (isIHSL(color)){
-  
+        const h = this.toHue(color.h);
+        const s = this.toPerc(color.s);
+        const l = this.toPerc(color.l);
+        const rgb = this.hslToRgb(h, s, l);
+        this.red = rgb.red;
+        this.green = rgb.green;
+        this.blue = rgb.blue;
+        this.alpha = color.a !== undefined ? this.toFrac(color.a) : new Frac(1);
       } else {
         throw new Error('Invalid value type');
       }
     } catch (error) {
-
+      throw new Error('Invalid value type');
     }
     
 	}
 
+  private rgbToLightness (r: Octet, g: Octet, b: Octet): Perc {
+    return new Perc(1/2 * (Math.max(r.octet, g.octet, b.octet) + Math.min(r.octet, g.octet, b.octet)))
+  }
+
+  private rgbToSaturation (r: Octet, g: Octet, b: Octet): Perc {
+    const L = this.rgbToLightness(r,g,b);
+    const max = Math.max(r.octet, g.octet, b.octet);
+    const min = Math.min(r.octet, g.octet, b.octet);
+
+    if (L.perc === 0 || L.perc === 1) {
+      return new Perc(0)
+    } else {
+      return new Perc((max - min)/(1 - Math.abs(2 * L.perc - 1)))
+    }
+  };
+
+  private rgbToHue (r: Octet, g: Octet, b: Octet): Hue {
+    return new Hue(Math.round(Math.atan2( Math.sqrt(3) * (g.octet - b.octet), 2 * r.octet - g.octet - b.octet,) * 180 / Math.PI));
+  }
+
+  private rgbToHsl (r: Octet, g: Octet, b: Octet): {h: Hue, s: Perc, l:Perc} {
+    const lightness = this.rgbToLightness(r,g,b);
+    const saturation = this.rgbToSaturation(r,g,b);
+    const hue = this.rgbToHue(r,g,b);
+    return {h: hue, s: saturation, l: lightness};
+  }
+
+  private hslToRgb (h: Hue, s: Perc ,l: Perc):{red: Octet, green: Octet, blue: Octet} {
+    const C = (1 - Math.abs(2 * l.perc - 1)) * s.perc;
+    const hPrime = h.hue / 60;
+    const X = C * (1 - Math.abs(hPrime % 2 - 1));
+    const m = l.perc - C/2;
+    const withLight = (r: number, g: number, b: number) => {
+      return {red: new Octet(r + m), green: new Octet(g + m), blue: new Octet(b + m)};
+    }
+    if (hPrime <= 1) { return withLight(C, X,0); } else
+      if (hPrime <= 2) { return withLight(X, C,0); } else
+      if (hPrime <= 3) { return withLight(0, C, X); } else
+      if (hPrime <= 4) { return withLight(0, X, C); } else
+      if (hPrime <= 5) { return withLight(X,0, C); } else
+      if (hPrime <= 6) { return withLight(C,0, X); }
+    throw new Error('Invalid value type');
+  }
+  
    
   private toOctet(value: any): Octet{
     try {
@@ -107,6 +102,17 @@ class Color {
         return value
       }
       return new Octet(value);
+    } catch (error) {
+      throw new Error('Invalid value type');
+    }
+  }
+
+  private toHue(value: any): Hue{
+    try {
+      if (value instanceof Hue){
+        return value
+      }
+      return new Hue(value);
     } catch (error) {
       throw new Error('Invalid value type');
     }
@@ -126,7 +132,24 @@ class Color {
       throw new Error('Invalid value type');
     }
   }
+
+
+  private toPerc(value: any): Perc{
+    try {
+      if (value instanceof Perc){
+        return value
+      } else if (value instanceof Frac){
+        return new Perc(value.frac * 100)
+      } else if (typeof value === 'string') {
+        return new Perc(value);
+      }
+      return new Perc(value);
+    } catch (error) {
+      throw new Error('Invalid value type');
+    }
+  }
 }
+
 
 
 const hexa2String = (value:number):string => {

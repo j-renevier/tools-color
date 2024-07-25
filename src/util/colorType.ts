@@ -12,7 +12,7 @@ export class Octet {
 
   private validate(value: number|string): TOctet {
     const HexaRegex = /^[0-9A-Fa-f]{2}$/;
-    if (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 255) {
+    if (typeof value === 'number' && value >= 0 && value <= 255) {
       return value;
     } else if (typeof value === 'string' && HexaRegex.test(value)){
       this.validate(parseInt(value, 16))
@@ -22,7 +22,7 @@ export class Octet {
 
   public isOctet(value: number|string): boolean {
     const HexaRegex = /^[0-9A-Fa-f]{2}$/;
-    if (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 255) {
+    if (typeof value === 'number' && value >= 0 && value <= 255) {
       return true;
     } else if (typeof value === 'string' && HexaRegex.test(value)){
       this.validate(parseInt(value, 16))
@@ -111,7 +111,7 @@ export class Hue {
   }
 
   private validate(value: number): THue {
-    if (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 360) {
+    if (typeof value === 'number' && value >= 0 && value <= 360) {
       return value;
     }
     throw new Error('Invalid perc value: Must be an integer between 0 and 1');
@@ -124,11 +124,11 @@ export class Hue {
     return false;
   }
 
-  public get frac(): THue {
+  public get hue(): THue {
     return this.value;
   }
 
-  public set frac(newValue: number) {
+  public set hue(newValue: number) {
     this.value = this.validate(newValue);
   }
 }
