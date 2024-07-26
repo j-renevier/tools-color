@@ -1,9 +1,62 @@
+import { useState } from "react";
 import { Color } from "../../util/color";
 
 const RootPage = () => {
 
 
-
+  function useState(initialValue:any) {
+    let state = initialValue;
+  
+    function getState() {
+      return state;
+    }
+  
+    function setState(newValue:any) {
+      state = newValue;
+      notifyChange();
+    }
+  
+    const listeners:any = [];
+  
+    function notifyChange() {
+      listeners.forEach((listener:any) => listener(state));
+    }
+  
+    function subscribe(listener:any) {
+      listeners.push(listener);
+    }
+  
+    function unsubscribe(listener:any) {
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    }
+  
+    return [getState, setState, subscribe, unsubscribe];
+  }
+  
+  // Exemple d'utilisation
+  const [getColor, setColor, subscribeToColor, unsubscribeFromColor] = useState('red');
+  
+  // Fonction pour réagir aux changements de couleur
+  function handleColorChange(newColor:any) {
+    console.log('Color changed to:', newColor);
+  }
+  
+  // S'abonner aux changements de couleur
+  subscribeToColor(handleColorChange);
+  
+  console.log(); // red
+  
+  setColor('blue'); // Color changed to: blue
+  console.log(getColor); // blue
+  
+  // Désabonner aux changements de couleur
+  unsubscribeFromColor(handleColorChange);
+  
+  setColor('green'); // Pas de notification
+  console.log(getColor); // green
 
 
 
