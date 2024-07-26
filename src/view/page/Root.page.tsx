@@ -1,13 +1,9 @@
+import { Color } from "../../util/color";
+
 const RootPage = () => {
 
-  const x = 11; 
-  const y = 0xB; 
-  const z = 'B'; 
-  console.log(x, typeof x, x.toString(16), typeof x.toString(16))
-  console.log(y, typeof y, y.toString(16), typeof y.toString(16))
-  console.log(y + x )
- 
-  console.log(z, typeof z, parseInt(z, 16)+ x)
+
+
 
 
 
@@ -19,10 +15,41 @@ const RootPage = () => {
           <h2>Parametres</h2>
           <div>
             <div>
-              <label htmlFor="inputMainColor">Select main color</label>
+              <label htmlFor="inputMainColor">Main color</label>
               <input type="color" id="inputMainColor"/>
+              <h4>rgb: </h4>
+              <h4>hsl: </h4>
+              <h4>alpha: </h4>
             </div>
-            <div id="picker" className="colorPicker"></div>
+            <div>
+              <div>
+                <h3>RGB</h3>
+                <label htmlFor="inputRed">Rouge</label>
+                <input type="range" id="inputRed" name="red" min="0" max="255" step="1" value="0"/>
+                
+                <label htmlFor="inputGreen">Vert</label>
+                <input type="range" id="inputGreen" name="green" min="0" max="255" step="1" value="0"/>
+                
+                <label htmlFor="inputBlue">Bleu</label>
+                <input type="range" id="inputBlue" name="blue" min="0" max="255" step="1" value="0"/>
+              </div>
+              <div>
+                <h3>HSL</h3>
+                <label htmlFor="inputHue">Teinte</label>
+                <input type="range" id="inputHue" name="hue" min="0" max="360" step="1" value="0"/>
+                
+                <label htmlFor="inputSaturation">Saturation</label>
+                <input type="range" id="inputSaturation" name="saturation" min="0" max="100" step="1" value="0"/>
+                
+                <label htmlFor="inputLuminosity">Luminosité</label>
+                <input type="range" id="inputLuminosity" name="luminosity" min="0" max="100" step="1" value="0"/>
+              </div>
+              <div>
+                <h3>HSL</h3>
+                <label htmlFor="inputAlpha">Alpha</label>
+                <input type="range" id="inputAlpha" name="alpha" min="0" max="1" step="0.01" value="0"/>
+              </div>
+            </div>
             <div>
               <button className="button">Generate random main color</button>
             </div>

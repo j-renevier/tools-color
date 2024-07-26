@@ -6,16 +6,19 @@ export type THue = number;
 export class Octet {
   private value: TOctet;
 
-  constructor(value?: any) {
+  constructor(value?: number|string) {
     this.value = this.validate(value);
   }
 
-  private validate(value: number|string): TOctet {
+  private validate(value: number|string|undefined): TOctet {
+    if (typeof value === 'undefined'){
+      return 0;
+    }
     const HexaRegex = /^[0-9A-Fa-f]{2}$/;
     if (typeof value === 'number' && value >= 0 && value <= 255) {
       return value;
     } else if (typeof value === 'string' && HexaRegex.test(value)){
-      this.validate(parseInt(value, 16))
+      return this.validate(parseInt(value, 16))
     }
     throw new Error('Invalid octet value: Must be an integer between 0 and 255');
   }
