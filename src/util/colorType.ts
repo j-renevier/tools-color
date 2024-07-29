@@ -1,7 +1,11 @@
+import { ErrorMessage } from "./ErrorMessage";
+import { floor } from "./math";
+
 export type TOctet = number;
 export type TPerc = number;
 export type TFrac = number;
 export type THue = number;
+export type Callback = (value: any) => void;
 
 export class Octet {
   private value: TOctet;
@@ -20,7 +24,7 @@ export class Octet {
     } else if (typeof value === 'string' && HexaRegex.test(value)){
       return this.validate(parseInt(value, 16))
     }
-    throw new Error('Invalid octet value: Must be an integer between 0 and 255');
+    throw new Error(`Invalid octet value: Must be an integer between 0 and 255, ${value} pass`);
   }
 
   public isOctet(value: number|string): boolean {
@@ -33,11 +37,11 @@ export class Octet {
     return false;
   }
 
-  public get octet(): TOctet {
+  public get get(): TOctet {
     return this.value;
   }
 
-  public set octet(newValue: number|string) {
+  public set set(newValue: number|string) {
     this.value = this.validate(newValue);
   }
 }
@@ -50,12 +54,14 @@ export class Perc {
   }
 
   private validate(value: number): TPerc {
-    if (typeof value === 'number' && value >= 0 && value <= 100) {
-      return value;
+    if (typeof value === 'number') {
+      if (value >= 0 && value <= 100){
+        return value;
+      }
     } else if (typeof value === 'string'){
       this.validate(parseInt(value, 10))
     }
-    throw new Error('Invalid perc value: Must be an integer between 0 and 100');
+    throw new Error(`Invalid Perc value: Must be an integer between 0 and 100, ${value} pass`);
   }
 
   public isPerc(value: number): boolean {
@@ -65,11 +71,11 @@ export class Perc {
     return false;
   }
 
-  public get perc(): TPerc {
+  public get get(): TPerc {
     return this.value;
   }
 
-  public set perc(newValue: number) {
+  public set set(newValue: number) {
     this.value = this.validate(newValue);
   }
 }
@@ -87,7 +93,7 @@ export class Frac {
     } else if (typeof value === 'string'){
       this.validate(parseInt(value, 1))
     }
-    throw new Error('Invalid perc value: Must be an integer between 0 and 1');
+    throw new Error(`Invalid Frac value: Must be an integer between 0 and 1, ${value} pass`);
   }
 
   public isFrac(value: number): boolean {
@@ -97,11 +103,11 @@ export class Frac {
     return false;
   }
 
-  public get frac(): TFrac {
+  public get get(): TFrac {
     return this.value;
   }
 
-  public set frac(newValue: number) {
+  public set set(newValue: number) {
     this.value = this.validate(newValue);
   }
 }
@@ -114,46 +120,66 @@ export class Hue {
   }
 
   private validate(value: number): THue {
+    value = ((value % 360) + 360) % 360;
     if (typeof value === 'number' && value >= 0 && value <= 360) {
       return value;
+    } else {
+      ErrorMessage.error(ErrorMessage.hueValidateInvalidType, typeof value)
     }
-    throw new Error('Invalid perc value: Must be an integer between 0 and 1');
+    throw new Error(ErrorMessage.hueValidateInvalidType)
   }
 
-  public isFrac(value: any): boolean {
-    if (typeof value === 'number' && value >= 0 && value <= 1) {
+  public isHue(value: any): boolean {
+    value = ((value % 360) + 360) % 360;
+    if (typeof value === 'number' && value >= 0 && value <= 360) {
       return true;
     }
     return false;
   }
 
-  public get hue(): THue {
+  public get get(): THue {
     return this.value;
   }
 
-  public set hue(newValue: number) {
+  public set set(newValue: number) {
     this.value = this.validate(newValue);
   }
+}
+
+export interface IRGBA {
+  r: Octet | number | string , 
+  g: Octet | number | string , 
+  b: Octet | number | string ,  
+  a: Frac | Perc | number | string,
+}
+export function isIRGBA(value: any): value is IRGBA {
+  return 'r' in value && 'g' in value && 'b' in value && 'a' in value;
 }
 
 export interface IRGB {
   r: Octet | number | string , 
   g: Octet | number | string , 
-  b: Octet | number | string ,  
-  a: Frac | Perc | number | string | undefined,
+  b: Octet | number | string
 }
-
 export function isIRGB(value: any): value is IRGB {
   return 'r' in value && 'g' in value && 'b' in value;
+}
+
+export interface IHSLA {
+  h: Hue | number | string , 
+  s: Frac | Perc | number | string , 
+  l: Frac | Perc | number | string ,  
+  a: Frac | Perc | number | string,
+}
+export function isIHSLA(value: any): value is IHSLA {
+  return 'h' in value && 's' in value && 'l' in value && 'a' in value;
 }
 
 export interface IHSL {
   h: Hue | number | string , 
   s: Frac | Perc | number | string , 
-  l: Frac | Perc | number | string ,  
-  a: Frac | Perc | number | string | undefined,
+  l: Frac | Perc | number | string , 
 }
-
 export function isIHSL(value: any): value is IHSL {
   return 'h' in value && 's' in value && 'l' in value;
 }

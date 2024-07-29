@@ -1,4 +1,6 @@
-*, *:before, *:after{
+/* RESET START */
+
+*, *:before, *:after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -12,13 +14,16 @@ html:focus-within {
   scroll-behavior: smooth;
 }
 
-body{
+body {
   line-height: 1.5;
+  color: initial;
+  background: initial;
 }
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
-  hyphens: auto;
+  -webkit-hyphens: auto;
+          hyphens: auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -28,6 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 a {
   text-decoration: none;
   color: currentcolor;
+  -webkit-text-decoration-skip: ink;
   text-decoration-skip-ink: auto;
 }
 
@@ -45,20 +51,20 @@ img, picture, video, canvas, svg {
   max-width: 100%;
 }
 
-ul, ol{
-  list-style: none; 
+ul, ol {
+  list-style: none;
 }
 
-blockquote, q{
+blockquote, q {
   quotes: none;
 }
 
-blockquote:before, blockquote:after, q:before, q:after{
-  content: '';
+blockquote:before, blockquote:after, q:before, q:after {
+  content: "";
   content: none;
 }
 
-table{
+table {
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -69,9 +75,8 @@ table{
 
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
-   scroll-behavior: auto;
+    scroll-behavior: auto;
   }
-  
   *,
   *::before,
   *::after {
@@ -82,7 +87,4 @@ table{
   }
 }
 
-body {
-  color: var(--color-);
-}
-
+/* RESET END */
