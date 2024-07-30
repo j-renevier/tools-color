@@ -172,11 +172,11 @@ label.param.hue .value{
   left: calc(100% * (var(--color-main-hue) / 360));
 }
 label.param.saturation .value{
-  left: calc(100% * (var(--color-main-saturation) / 100));
+  left: var(--color-main-saturation);
 }
 
 label.param.light .value{
-  left: calc(100% * (var(--color-main-light) / 100));
+  left: var(--color-main-light) ;
 }
 
 label.param.alpha .value{
@@ -404,7 +404,7 @@ input[type=range]::-webkit-slider-thumb {
   box-shadow: none;
   border:  var(--size1) solid var(--color-dark);
   border-radius:  var(--size9999);
-  background: rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha));
+  background: transparent;
   filter:  blur( var(--size1));
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -425,8 +425,8 @@ input[type=range]::-moz-range-thumb {
 }
 
 input[type=range]:focus::-webkit-slider-thumb {
-  height: calc( 100% + var(--size4));
-  margin: calc( -1 * var(--size4) / 2 ) 0;
+  height: calc( 100% + var(--size8));
+  margin: calc( -1 * var(--size8) / 2 ) 0;
   aspect-ratio: 1 / 1;
 }
 

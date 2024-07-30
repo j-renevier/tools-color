@@ -24,6 +24,16 @@ const RootPage = () => {
 
   let root = document.documentElement
 
+  useEffect(()=> {
+    root.style.setProperty('--color-main-red', red.toString())
+    root.style.setProperty('--color-main-green', green.toString())
+    root.style.setProperty('--color-main-blue', blue.toString())
+    root.style.setProperty('--color-main-hue', hue.toString())
+    root.style.setProperty('--color-main-saturation', saturation.toString() + '%')
+    root.style.setProperty('--color-main-light', light.toString() + '%')
+    root.style.setProperty('--color-main-alpha', alpha.toString())
+  })
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value !== ''){
       switch(event.target.name){

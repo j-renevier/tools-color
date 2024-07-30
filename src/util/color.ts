@@ -595,5 +595,5 @@ export class Color {
 
 
 
-const color:Color =  new Color({r: 100, g: 100, b: 100}) 
+const color:Color =  new Color({r: 255, g: 0, b: 0}) 
 export default color
