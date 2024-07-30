@@ -183,3 +183,4 @@ export interface IHSL {
 export function isIHSL(value: any): value is IHSL {
   return 'h' in value && 's' in value && 'l' in value;
 }
+

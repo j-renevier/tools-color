@@ -3,6 +3,7 @@ import color, { Color } from "../../util/Color";
 import Plus from "../../assets/media/icon/plus";
 import Minus from "../../assets/media/icon/minus";
 import { ErrorMessage } from "../../util/ErrorMessage";
+import { Octet } from "../../util/colorType";
 
 const mainColorStyle = (color:string) => {
   return {
@@ -10,7 +11,27 @@ const mainColorStyle = (color:string) => {
   }
 }
 
+interface ColorValue {
+  value: number | string;
+  setValue: (v: number | string) => void;
+}
+
+interface IValues {
+  red: ColorValue;
+  green: ColorValue;
+  blue: ColorValue;
+  hue: ColorValue;
+  saturation: ColorValue;
+  light: ColorValue;
+  alpha: ColorValue;
+  hexa: ColorValue;
+  rgbaStringCSS: ColorValue;
+}
+
+
+
 const RootPage = () => {
+
   
   const [red, setRed] = useState(color.red.get);
   const [green, setGreen] = useState(color.green.get);
@@ -22,7 +43,37 @@ const RootPage = () => {
   const [hexa, setHexa] = useState(color.hexa);
   const [rgbaStringCSS, setRgbaStringCSS] = useState(color.rgbaStringCSS);
 
+  interface ColorValue {
+    value: number | string;
+    setValue: (v: number | string) => void;
+  }
+  
+  interface IValues {
+    red: ColorValue;
+    green: ColorValue;
+    blue: ColorValue;
+    hue: ColorValue;
+    saturation: ColorValue;
+    light: ColorValue;
+    alpha: ColorValue;
+    hexa: ColorValue;
+    rgbaStringCSS: ColorValue;
+  }
+
+  const [values, setValues]: Array<IValues, (v: IValues) => void> = useState({
+    red: { value: color.red.get, setValue: (v: typeof values.red.value) => setValues((prev: typeof values) => ({ ...prev, red: { value: v, setValue: prev.red.setValue } })) },
+    green: { value: color.green.get, setValue: (v: typeof values.green.value) => setValues((prev: typeof values) => ({ ...prev, green: { value: v, setValue: prev.green.setValue } })) },
+    blue: { value: color.blue.get, setValue: (v: typeof values.blue.value) => setValues((prev: typeof values) => ({ ...prev, blue: { value: v, setValue: prev.blue.setValue } })) },
+    hue: { value: color.hue.get, setValue: (v: typeof values.hue.value) => setValues((prev: typeof values) => ({ ...prev, hue: { value: v, setValue: prev.hue.setValue } })) },
+    saturation: { value: color.saturation.get, setValue: (v: typeof values.saturation.value) => setValues((prev: typeof values) => ({ ...prev, saturation: { value: v, setValue: prev.saturation.setValue } })) },
+    light: { value: color.light.get, setValue: (v: typeof values.light.value) => setValues((prev: typeof values) => ({ ...prev, light: { value: v, setValue: prev.light.setValue } })) },
+    alpha: { value: color.alpha.get, setValue: (v: typeof values.alpha.value) => setValues((prev: typeof values) => ({ ...prev, alpha: { value: v, setValue: prev.alpha.setValue } })) },
+    hexa: { value: color.hexa, setValue: (v: typeof values.hexa.value) => setValues((prev: typeof values) => ({ ...prev, hexa: { value: v, setValue: prev.hexa.setValue } })) },
+    rgbaStringCSS: { value: color.rgbaStringCSS, setValue: (v: typeof values.rgbaStringCSS.value) => setValues((prev: typeof values) => ({ ...prev, rgbaStringCSS: { value: v, setValue: prev.rgbaStringCSS.setValue } })) }
+  });
+
   let root = document.documentElement
+  values.
 
   useEffect(()=> {
     root.style.setProperty('--color-main-red', red.toString())
@@ -34,96 +85,116 @@ const RootPage = () => {
     root.style.setProperty('--color-main-alpha', alpha.toString())
   })
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value !== ''){
-      switch(event.target.name){
-        case 'red': 
-          color.red = Number(event.target.value)
-          setRed(() => Number(event.target.value));
-          setHue(() => color.hue.get);
-          setSaturation(() => color.saturation.get);
-          setLight(() => color.light.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-red', red.toString())
-          root.style.setProperty('--color-main-hue', hue.toString())
-          root.style.setProperty('--color-main-saturation', saturation.toString())
-          root.style.setProperty('--color-main-light', light.toString())
-          break;
-        case 'green': 
-          color.green = Number(event.target.value)
-          setGreen(() => Number(event.target.value));
-          setHue(() => color.hue.get);
-          setSaturation(() => color.saturation.get);
-          setLight(() => color.light.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-green', green.toString())
-          root.style.setProperty('--color-main-hue', hue.toString())
-          root.style.setProperty('--color-main-saturation', saturation.toString())
-          root.style.setProperty('--color-main-light', light.toString())
-          break;
-        case 'blue': 
-          color.blue = Number(event.target.value)
-          setBlue(() => Number(event.target.value));
-          setHue(() => color.hue.get);
-          setSaturation(() => color.saturation.get);
-          setLight(() => color.light.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-blue', blue.toString())
-          root.style.setProperty('--color-main-hue', hue.toString())
-          root.style.setProperty('--color-main-saturation', saturation.toString())
-          root.style.setProperty('--color-main-light', light.toString())
-          break;
-        case 'hue': 
-          color.hue = Number(event.target.value)
-          setHue(()=> Number(event.target.value));
-          setRed(() => color.red.get);
-          setGreen(() => color.green.get);
-          setBlue(() => color.blue.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-hue', hue.toString())
-          root.style.setProperty('--color-main-red', red.toString())
-          root.style.setProperty('--color-main-green', green.toString())
-          root.style.setProperty('--color-main-blue', blue.toString())
-          break;
-        case 'saturation': 
-          color.saturation = Number(event.target.value)
-          setSaturation(() => Number(event.target.value));
-          setRed(() => color.red.get);
-          setGreen(() => color.green.get);
-          setBlue(() => color.blue.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-saturation', saturation.toString() + '%')
-          root.style.setProperty('--color-main-red', red.toString())
-          root.style.setProperty('--color-main-green', green.toString())
-          root.style.setProperty('--color-main-blue', blue.toString())
-          break;
-        case 'light': 
-          color.light = Number(event.target.value)
-          setLight(() => Number(event.target.value));
-          setRed(() => color.red.get);
-          setGreen(() => color.green.get);
-          setBlue(() => color.blue.get);
-          setHexa(() => color.hexa);
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-light', light.toString() + '%')
-          root.style.setProperty('--color-main-red', red.toString())
-          root.style.setProperty('--color-main-green', green.toString())
-          root.style.setProperty('--color-main-blue', blue.toString())
-          break;
-        case 'alpha': 
-          color.alpha = Number(event.target.value)
-          setAlpha(() => Number(event.target.value));
-          setRgbaStringCSS(() => color.rgbaStringCSS);
-          root.style.setProperty('--color-main-alpha', alpha.toString())
-          break;
-      }
+  const changeColor = (newValue: number, name: string) => {
+    switch(name){
+      case 'red': 
+        color.red = newValue;
+        setRed(() => newValue);
+        setHue(() => color.hue.get);
+        setSaturation(() => color.saturation.get);
+        setLight(() => color.light.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-red', red.toString());
+        root.style.setProperty('--color-main-hue', hue.toString());
+        root.style.setProperty('--color-main-saturation', saturation.toString());
+        root.style.setProperty('--color-main-light', light.toString());
+        break;
+      case 'green': 
+        color.green = newValue;
+        setGreen(() => newValue);
+        setHue(() => color.hue.get);
+        setSaturation(() => color.saturation.get);
+        setLight(() => color.light.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-green', green.toString());
+        root.style.setProperty('--color-main-hue', hue.toString());
+        root.style.setProperty('--color-main-saturation', saturation.toString());
+        root.style.setProperty('--color-main-light', light.toString());
+        break;
+      case 'blue': 
+        color.blue = newValue;
+        setBlue(() => newValue);
+        setHue(() => color.hue.get);
+        setSaturation(() => color.saturation.get);
+        setLight(() => color.light.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-blue', blue.toString());
+        root.style.setProperty('--color-main-hue', hue.toString());
+        root.style.setProperty('--color-main-saturation', saturation.toString());
+        root.style.setProperty('--color-main-light', light.toString());
+        break;
+      case 'hue': 
+        color.hue = newValue;
+        setHue(()=> newValue);
+        setRed(() => color.red.get);
+        setGreen(() => color.green.get);
+        setBlue(() => color.blue.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-hue', hue.toString());
+        root.style.setProperty('--color-main-red', red.toString());
+        root.style.setProperty('--color-main-green', green.toString());
+        root.style.setProperty('--color-main-blue', blue.toString());
+        break;
+      case 'saturation': 
+        color.saturation = newValue;
+        setSaturation(() => newValue);
+        setRed(() => color.red.get);
+        setGreen(() => color.green.get);
+        setBlue(() => color.blue.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-saturation', saturation.toString() + '%');
+        root.style.setProperty('--color-main-red', red.toString());
+        root.style.setProperty('--color-main-green', green.toString());
+        root.style.setProperty('--color-main-blue', blue.toString());
+        break;
+      case 'light': 
+        color.light = newValue;
+        setLight(() => newValue);
+        setRed(() => color.red.get);
+        setGreen(() => color.green.get);
+        setBlue(() => color.blue.get);
+        setHexa(() => color.hexa);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-light', light.toString() + '%');
+        root.style.setProperty('--color-main-red', red.toString());
+        root.style.setProperty('--color-main-green', green.toString());
+        root.style.setProperty('--color-main-blue', blue.toString());
+        break;
+      case 'alpha': 
+        color.alpha = newValue;
+        setAlpha(() => newValue);
+        setRgbaStringCSS(() => color.rgbaStringCSS);
+        root.style.setProperty('--color-main-alpha', alpha.toString());
+        break;
+      default: 
+        null;
     }
   }
+
+  const [red, setRed] = useState(color.red.get);
+  const handleIncrement = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    value = usestate with the name: event.target.name
+
+    changeColor(( value + 1), event.target.name)
+    
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== ''){
+      changeColor(Number(event.target.value), event.target.name)
+    }
+  }
+
+
+
+  
+
 
   const handleKeyDown = (event:React.KeyboardEvent<HTMLInputElement>) => {
     const input = event.target as HTMLInputElement;
