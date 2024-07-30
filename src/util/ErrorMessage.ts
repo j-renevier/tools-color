@@ -31,6 +31,8 @@ export class ErrorMessage {
   public static colorSetAlphaInvalidType = 'COLOR SET_ALPHA INVALID TYPE'
   public static colorSetSaturationInvalidType = 'COLOR SET_SATURATION INVALID TYPE'
 
+  public static rootNotSelect = 'SELECT ROOT CSS IN DOCUMENT'
+
   
   public static error (message: ErrorMessage, error?:unknown) {
     if (error instanceof Error) {
