@@ -183,7 +183,13 @@ label.param.alpha .value{
   left: calc(100% * (var(--color-main-alpha) / 1));
 }
 
-label.param.red input[type=range]::-webkit-slider-runnable-track,
+label.param.red input[type=range]::-webkit-slider-runnable-track{
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--color-red-min), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)), 
+    rgba(var(--color-red-max), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)));
+}
+
 label.param.red input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
@@ -191,7 +197,13 @@ label.param.red input[type=range]::-moz-range-track {
     rgba(var(--color-red-max), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)));
 }
 
-label.param.green input[type=range]::-webkit-slider-runnable-track, 
+label.param.green input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--color-main-red), var(--color-green-min), var(--color-main-blue), var(--color-main-alpha)), 
+    rgba(var(--color-main-red), var(--color-green-max), var(--color-main-blue), var(--color-main-alpha)));
+}
+
 label.param.green input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
@@ -199,7 +211,6 @@ label.param.green input[type=range]::-moz-range-track {
     rgba(var(--color-main-red), var(--color-green-max), var(--color-main-blue), var(--color-main-alpha)));
 }
 
-label.param.blue input[type=range]::-webkit-slider-runnable-track,
 label.param.blue input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
@@ -207,15 +218,41 @@ label.param.blue input[type=range]::-moz-range-track {
     rgba(var(--color-main-red), var(--color-main-green), var(--color-blue-max), var(--color-main-alpha)));
 }
 
-label.param.hue input[type=range]::-webkit-slider-runnable-track, 
+label.param.blue input[type=range]::-moz-range-track {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-blue-min), var(--color-main-alpha)), 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-blue-max), var(--color-main-alpha)));
+}
+
+label.param.hue input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    hsla(var(--color-hue-min), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(45, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(90, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(135, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(180, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(225, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(270, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(315, var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(var(--color-hue-min), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)));
+}
+ 
 label.param.hue input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
     hsla(var(--color-hue-min), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
-    hsla(var(--color-hue-max), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)));
+    hsla(calc(var(--color-main-hue) - 1), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)));
 }
 
-label.param.saturation input[type=range]::-webkit-slider-runnable-track, 
+label.param.saturation input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    hsla(var(--color-main-hue), var(--color-saturation-min), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(var(--color-main-hue), var(--color-saturation-max), var(--color-main-light), var(--color-main-alpha)));
+}
+
 label.param.saturation input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
@@ -223,7 +260,13 @@ label.param.saturation input[type=range]::-moz-range-track {
     hsla(var(--color-main-hue), var(--color-saturation-max), var(--color-main-light), var(--color-main-alpha)));
 }
 
-label.param.light input[type=range]::-webkit-slider-runnable-track, 
+label.param.light input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    hsla(var(--color-main-hue), var(--color-main-saturation), var(--color-light-min), var(--color-main-alpha)), 
+    hsla(var(--color-main-hue), var(--color-main-saturation), var(--color-light-max), var(--color-main-alpha)));
+}
+
 label.param.light input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
@@ -231,13 +274,20 @@ label.param.light input[type=range]::-moz-range-track {
     hsla(var(--color-main-hue), var(--color-main-saturation), var(--color-light-max), var(--color-main-alpha)));
 }
 
-label.param.alpha input[type=range]::-webkit-slider-runnable-track, 
+label.param.alpha input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-alpha-min)), 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-alpha-max)));
+}
+
 label.param.alpha input[type=range]::-moz-range-track {
   background: linear-gradient(
     90deg, 
     rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-alpha-min)), 
-    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-alpha-min)));
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-alpha-max)));
 }
+
 
 label.param .value button.button{
   height: 70%;
@@ -296,18 +346,34 @@ input[type=range]::-moz-range-track {
 .red input[type=range]::-webkit-slider-runnable-track,
 .green input[type=range]::-webkit-slider-runnable-track,
 .blue input[type=range]::-webkit-slider-runnable-track,
-.red input[type=range]::-moz-range-track,
-.green input[type=range]::-moz-range-track,
-.blue input[type=range]::-moz-range-track {
+.alpha input[type=range]::-webkit-slider-runnable-track  {
   background: linear-gradient(
     90deg, 
     rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)), 
     rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)));
 }
 
+.red input[type=range]::-moz-range-track,
+.green input[type=range]::-moz-range-track,
+.blue input[type=range]::-moz-range-track,
+.alpha input[type=range]::-moz-range-track  {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)), 
+    rgba(var(--color-main-red), var(--color-main-green), var(--color-main-blue), var(--color-main-alpha)));
+}
+
+
+
 .hue input[type=range]::-webkit-slider-runnable-track,
 .saturation input[type=range]::-webkit-slider-runnable-track,
-.light input[type=range]::-webkit-slider-runnable-track,
+.light input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg, 
+    hsla(var(--color-main-hue), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)), 
+    hsla(var(--color-main-hue), var(--color-main-saturation), var(--color-main-light), var(--color-main-alpha)));
+}
+
 .hue input[type=range]::-moz-range-track,
 .saturation input[type=range]::-moz-range-track,
 .light input[type=range]::-moz-range-track {
@@ -385,7 +451,7 @@ input[type=number]{
   line-height: 1.375;
   font-weight: 400;
   text-align: center !important;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s linear;
 }
 
 input[type=number]:hover {
