@@ -594,6 +594,7 @@ export class Color {
 
 
 
-
-const color:Color =  new Color({r: 255, g: 0, b: 0}) 
+const color:Color =  new Color({r: 255, g: 0, b: 0})
+export type TColor = Color;
 export default color
+
