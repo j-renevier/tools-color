@@ -6,18 +6,18 @@
   padding: 0;
 }
 
-#root, #__next {
-  isolation: isolate;
-}
-
 html:focus-within {
   scroll-behavior: smooth;
 }
 
-body {
+body {  
   line-height: 1.5;
   color: initial;
   background: initial;
+}
+
+#root, #__next {
+  isolation: isolate;
 }
 
 p, h1, h2, h3, h4, h5, h6 {

@@ -16,7 +16,6 @@ export class Color {
   private _alpha: Frac = new Frac(1);
 
   constructor(color?: string | IRGB | IRGBA | IHSL | IHSLA ) {
-    console.log('construct')
     if (!color){
       return 
     }

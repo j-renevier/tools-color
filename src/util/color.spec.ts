@@ -1,4 +1,4 @@
-import { Color } from "./Color";
+import { Color } from "./color";
 import { Frac, Hue, Octet, Perc } from "./colorType";
 
 function runTests() {
