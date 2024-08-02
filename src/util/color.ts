@@ -342,7 +342,7 @@ export class Color {
     const s = (l === 0 || l === 1)? 0 : delta / (1 - Math.abs( 2*l - 1))
     const h = Math.atan2(Math.sqrt(3) * (g - b), 2 * r - g - b,) * 180 / Math.PI
 
-    console.log(red.get, green.get, blue.get , '-' , h, s*100, l*100)
+    // console.log(red.get, green.get, blue.get , '-' , h, s*100, l*100)
     return {hue: new Hue(Math.round(h)), saturation: new Perc(Math.round(s * 100)), light: new Perc(Math.round(l * 100))};
   }
 
@@ -378,7 +378,7 @@ export class Color {
       rgb = {r : (C + m), g:( 0 + m), b: (X + m)}
     }
 
-    console.log(hue.get, saturation.get, light.get , '-' , rgb.r*255, rgb.g*255, rgb.b*255)
+    // console.log(hue.get, saturation.get, light.get , '-' , rgb.r*255, rgb.g*255, rgb.b*255)
     return { red: new Octet(Math.round(rgb.r*255)), green: new Octet(Math.round(rgb.g*255)), blue: new Octet(Math.round(rgb.b*255))}
   }
 

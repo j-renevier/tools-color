@@ -1,71 +1,120 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import color, { Color } from "../../util/color";
 
 interface CercleChromatiqueProps {
   colors: Color[];
+  radius: number;
 }
 
-const CercleChromatique: React.FC<CercleChromatiqueProps> = ({ colors }) => {
+const calcXCord = (hue: number, saturation: number, radius:number) => {
+  return radius + saturation / 100 * radius * Math.cos(hue * 2 * Math.PI / 360)
+}
 
-  // function getWheelHandlePosition(props: Partial<WheelProps>, color: IroColor) {
-  //   const hsv = color.hsv;
-  //   const { cx, cy } = getWheelDimensions(props);
-  //   const handleRange = getHandleRange(props);
-  //   const handleAngle = (180 + translateWheelAngle(props, hsv.h, true)) * (TAU / 360);
-  //   const handleDist = (hsv.s / 100) * handleRange;
-  //   const direction = props.wheelDirection === 'clockwise' ? -1 : 1;
-  //   return {
-  //     x: cx + handleDist * Math.cos(handleAngle) * direction,
-  //     y: cy + handleDist * Math.sin(handleAngle) * direction,
-  //   }
-  // }
+const calcYCord = (hue: number, saturation: number, radius:number) => {
+  return radius + saturation / 100 * radius * Math.sin(hue * 2 * Math.PI / 360)
+}
 
+const colorSegment = new Color({ h: 0, s: 100, l: 50, a: 1});
+
+const CercleChromatique: React.FC<CercleChromatiqueProps> = ({ colors, radius = 200 }) => {
+  const degToRad = 2 * Math.PI / 360;
+  const pointStyle = {
+    radius: 10,
+    startAngle: 0, 
+    endAngle: 2 * Math.PI,
+    color: 'rgba(255, 255, 255, 0)',
+    blur: 2,
+  }
+
+  const [coord, setCoord] = useState({x: calcXCord(color.hue.get, color.saturation.get, radius), y: calcYCord(color.hue.get, color.saturation.get, radius)})
   const canvasRef = useRef(null);
-
-    useEffect(() => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      const radius = canvas.width / 2;
-      const segmentAngle = 2 * Math.PI / 360;
-
-      // Dessiner les segments de la roue chromatique
-      for (let i = 0; i < 360; i++) {
-        const hue = i / 360; 
-        const color = new Color({h:i,s: 100, l: 50})
-        const rgbStringCSS = color.rgbStringCSS;
-
-        const gradient = ctx.createLinearGradient(radius + radius * Math.cos(i * segmentAngle), radius + radius * Math.sin(i * segmentAngle), radius, radius);
-        gradient.addColorStop(0, rgbStringCSS);
-        color.saturation = 0;
-        gradient.addColorStop(1, color.rgbStringCSS);
-
-        const pointX = radius + color.saturation.get * Math.cos(color.hue.get * segmentAngle);
-        const pointY = radius + color.saturation.get * Math.sin(color.hue.get * segmentAngle);
+  const offScreenCanvasRef = useRef(null);
   
+  const createChromatiqueCircle = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, radius * 2, radius * 2);
+    for (let i = 0; i < 360; i++) {
+      const gradient = ctx.createLinearGradient(
+        radius + radius * Math.cos(i * degToRad), 
+        radius + radius * Math.sin(i * degToRad), 
+        radius, 
+        radius
+      );
+      colorSegment.hue = i;
+      colorSegment.saturation = 100;
+      colorSegment.light = color.light.get
+      colorSegment.alpha = color.alpha.get
+      gradient.addColorStop(0, colorSegment.rgbaStringCSS);
+      colorSegment.saturation = 0;
+      gradient.addColorStop(1, colorSegment.rgbaStringCSS);
+      ctx.beginPath();
+      ctx.moveTo(radius, radius);
+      ctx.arc(radius, radius, radius, i * degToRad, (i + 1) * degToRad);
+      ctx.closePath(); 
+      ctx.fillStyle = gradient;
+      ctx.fill();
+    }
+  }
 
-        ctx.beginPath();
-        ctx.moveTo(radius, radius); // Début du chemin au centre
-        ctx.arc(radius, radius, radius, i * segmentAngle, (i + 1) * segmentAngle); // Dessiner l'arc
-        ctx.rect(pointX, pointY, 5 , 5)
-        ctx.closePath();
+  useEffect(() => {
+    createChromatiqueCircle()
+  }, []);
+
+  useEffect(() => {
+    createChromatiqueCircle()
+  }, [color.light.get]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    createChromatiqueCircle()
+
+    // const offScreenCanvas = offScreenCanvasRef.current;
+    // const offScreenCtx = offScreenCanvas?.getContext('2d');
 
 
-        ctx.fillStyle = gradient;
-        ctx.fill(); // Remplir le segment
+    // setCoord({x: calcXCord(color.hue.get, color.saturation.get, radius), y: calcYCord(color.hue.get, color.saturation.get, radius)})
+    // offScreenCtx.clearRect(0, 0, radius *2, radius*2);
+    // offScreenCtx.beginPath();
+    // offScreenCtx.arc(coord.x, coord.y, pointStyle.radius, pointStyle.startAngle, pointStyle.endAngle);
+    // offScreenCtx.closePath();
 
 
-        ctx.beginPath();
-        ctx.rect(pointX, pointY, 5 , 5)
-        ctx.closePath();
+    // offScreenCtx.fillStyle = pointStyle.color;
+    // offScreenCtx.fill();
+
+    // offScreenCtx.filter = 'blur(4px)';
+    // offScreenCtx.globalCompositeOperation = 'destination-in'; // Keep only the blur effect inside the shape
+    // offScreenCtx.beginPath();
+    // offScreenCtx.arc(coord.x, coord.y, pointStyle.radius, pointStyle.startAngle, pointStyle.endAngle);
+    // offScreenCtx.closePath();
+    // offScreenCtx.fill();
+
+    // // Draw the border on the main canvas
+    // ctx.lineWidth = 2;
+    // ctx.strokeStyle = 'black';
+    // ctx.beginPath();
+    // ctx.arc(coord.x, coord.y, pointStyle.radius, pointStyle.startAngle, pointStyle.endAngle);
+    // ctx.closePath();
+    // ctx.stroke();
 
 
-        ctx.fillStyle = color.rgbStringCSS;
-        ctx.fill(); 
-      }
-    }, []);
 
+
+    setCoord({x: calcXCord(color.hue.get, color.saturation.get, radius), y: calcYCord(color.hue.get, color.saturation.get, radius)})
+    ctx.beginPath();
+    ctx.arc(coord.x, coord.y, pointStyle.radius, pointStyle.startAngle, pointStyle.endAngle);
+    ctx.closePath();
+
+    ctx.fillStyle = pointStyle.color;
+    ctx.fill();
     
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
 
+  }, [color.red.get, color.green.get, color.blue.get, color.alpha.get]);
 
   return (
     <>
@@ -76,7 +125,7 @@ const CercleChromatique: React.FC<CercleChromatiqueProps> = ({ colors }) => {
           </li>
         ))}
       </ul>
-      <canvas ref={canvasRef} width="400" height="400" />
+      <canvas ref={canvasRef} width={radius * 2} height={radius * 2}  />
 
     </>
 
