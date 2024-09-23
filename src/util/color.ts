@@ -15,12 +15,61 @@ export class Color {
   private _light: Perc = new Perc(0);
   private _alpha: Frac = new Frac(1);
 
-  private _analogColors: Color[] 
-  private _polygonColors: Color[]
-  private _polyhedronColors: Color[]
-  private _complementaryTwiceColors: Color[]
-  private _complementaryDivideColors: Color[]
-  private _complementaryColors: Color[]
+  private _numberOfColors: number = 3;
+  private _mainColorPosition: number = 1;
+  private _interval: Frac = new Frac(1);
+
+  // private _analogColors: Color[] ;
+  // private _polygonColors: Color[];
+  // private _polyhedronColors: Color[];
+  // private _complementaryTwiceColors: Color[];
+  // private _complementaryDivideColors: Color[];
+  // private _complementaryColors: Color[];
+
+  public set numberOfColors(value: number) {
+    this._numberOfColors = value 
+  }
+  public get numberOfColors(): number {
+    return this._numberOfColors;
+  }
+  
+  public set mainColorPosition(value: number) {
+    this._mainColorPosition = value 
+  }
+  public get mainColorPosition(): number {
+    return this._mainColorPosition;
+  } 
+
+  public set interval(value: Frac) {
+    this._interval = value 
+  }
+  public get interval(): Frac {
+    return this._interval;
+  }
+
+
+
+  public calcAnalogColors(): Color[] {
+    let analogColors: Color[] = [];
+    for (let i = 0; i < this._numberOfColors; i++) {
+      let hsl: IHSL = {
+        h: new Hue(this._hue.get + i * 30).get,
+        s: this._saturation.get,
+        l: this._light.get
+      };
+      analogColors.push(new Color(hsl));
+    }
+    return analogColors;
+  }
+
+  public get analogColors(): Color[] {
+    return this.calcAnalogColors();
+  }
+
+
+
+
+
 
   constructor(color?: string | IRGB | IRGBA | IHSL | IHSLA ) {
     if (!color){

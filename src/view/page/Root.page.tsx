@@ -260,7 +260,7 @@ const RootPage = () => {
                 <CercleChromatique colors={[color, new Color({r: 255, g: 0, b: 0}), new Color({r: 0, g: 0, b: 0})]}/>
               </div>
               <div className="main_color-content color_gradient">
-                <div>
+                {/*<div>
                   <label>Position</label>
                   <input type="number" />
                 </div>
@@ -308,7 +308,7 @@ const RootPage = () => {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </div> */}
                 <div className="analog">
                   <ul>
                     {color.analogColors.map((color, index) => (
@@ -317,6 +317,10 @@ const RootPage = () => {
                       </li>
                     ))}
                   </ul>
+                  <div className="display_gradient" style={{ 
+                      background: `linear-gradient(90deg,${color.analogColors.map(c => c.rgbaStringCSS).join(', ')})`
+                    }}>
+                  </div>
                 </div>
               </div>
             </div>
