@@ -259,6 +259,66 @@ const RootPage = () => {
               <div className="main_color-content color_wheel">
                 <CercleChromatique colors={[color, new Color({r: 255, g: 0, b: 0}), new Color({r: 0, g: 0, b: 0})]}/>
               </div>
+              <div className="main_color-content color_gradient">
+                <div>
+                  <label>Position</label>
+                  <input type="number" />
+                </div>
+                <div className="complementary">
+                  <ul>
+                    {color.complementaryColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="complementary_divide">
+                  <ul>
+                    {color.complementaryDivideColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="complementary_twice">
+                  <ul>
+                    {color.complementaryTwiceColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="polyhedron">
+                  <ul>
+                    {color.polyhedronColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="polygon">
+                  <ul>
+                    {color.polygonColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="analog">
+                  <ul>
+                    {color.analogColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        {color.rgbaStringCSS}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -271,107 +331,3 @@ export default RootPage;
 
 
 
-
-
-
-  // const [red, setRed] = useState(color.red.get);
-  // const [green, setGreen] = useState(color.green.get);
-  // const [blue, setBlue] = useState(color.blue.get);
-  // const [hue, setHue] = useState(color.hue.get);
-  // const [saturation, setSaturation] = useState(color.saturation.get);
-  // const [light, setLight] = useState(color.light.get);
-  // const [alpha, setAlpha] = useState(color.alpha.get);
-  // const [hexa, setHexa] = useState(color.hexa);
-  // const [rgbaStringCSS, setRgbaStringCSS] = useState(color.rgbaStringCSS);
-
-
-    // const changeColor1 = (newValue: number, name: string) => {
-  //   switch(name){
-  //     case 'red': 
-  //       color.red = newValue;
-  //       setRed(() => newValue);
-  //       setHue(() => color.hue.get);
-  //       setSaturation(() => color.saturation.get);
-  //       setLight(() => color.light.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-red', red.toString());
-  //       root.style.setProperty('--color-main-hue', hue.toString());
-  //       root.style.setProperty('--color-main-saturation', saturation.toString());
-  //       root.style.setProperty('--color-main-light', light.toString());
-  //       break;
-  //     case 'green': 
-  //       color.green = newValue;
-  //       setGreen(() => newValue);
-  //       setHue(() => color.hue.get);
-  //       setSaturation(() => color.saturation.get);
-  //       setLight(() => color.light.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-green', green.toString());
-  //       root.style.setProperty('--color-main-hue', hue.toString());
-  //       root.style.setProperty('--color-main-saturation', saturation.toString());
-  //       root.style.setProperty('--color-main-light', light.toString());
-  //       break;
-  //     case 'blue': 
-  //       color.blue = newValue;
-  //       setBlue(() => newValue);
-  //       setHue(() => color.hue.get);
-  //       setSaturation(() => color.saturation.get);
-  //       setLight(() => color.light.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-blue', blue.toString());
-  //       root.style.setProperty('--color-main-hue', hue.toString());
-  //       root.style.setProperty('--color-main-saturation', saturation.toString());
-  //       root.style.setProperty('--color-main-light', light.toString());
-  //       break;
-  //     case 'hue': 
-  //       color.hue = newValue;
-  //       setHue(()=> newValue);
-  //       setRed(() => color.red.get);
-  //       setGreen(() => color.green.get);
-  //       setBlue(() => color.blue.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-hue', hue.toString());
-  //       root.style.setProperty('--color-main-red', red.toString());
-  //       root.style.setProperty('--color-main-green', green.toString());
-  //       root.style.setProperty('--color-main-blue', blue.toString());
-  //       break;
-  //     case 'saturation': 
-  //       color.saturation = newValue;
-  //       setSaturation(() => newValue);
-  //       setRed(() => color.red.get);
-  //       setGreen(() => color.green.get);
-  //       setBlue(() => color.blue.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-saturation', saturation.toString() + '%');
-  //       root.style.setProperty('--color-main-red', red.toString());
-  //       root.style.setProperty('--color-main-green', green.toString());
-  //       root.style.setProperty('--color-main-blue', blue.toString());
-  //       break;
-  //     case 'light': 
-  //       color.light = newValue;
-  //       setLight(() => newValue);
-  //       setRed(() => color.red.get);
-  //       setGreen(() => color.green.get);
-  //       setBlue(() => color.blue.get);
-  //       setHexa(() => color.hexa);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-light', light.toString() + '%');
-  //       root.style.setProperty('--color-main-red', red.toString());
-  //       root.style.setProperty('--color-main-green', green.toString());
-  //       root.style.setProperty('--color-main-blue', blue.toString());
-  //       break;
-  //     case 'alpha': 
-  //       color.alpha = newValue;
-  //       setAlpha(() => newValue);
-  //       setRgbaStringCSS(() => color.rgbaStringCSS);
-  //       root.style.setProperty('--color-main-alpha', alpha.toString());
-  //       break;
-  //     default: 
-  //       null;
-  //   }
-  // }

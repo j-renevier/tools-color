@@ -15,6 +15,13 @@ export class Color {
   private _light: Perc = new Perc(0);
   private _alpha: Frac = new Frac(1);
 
+  private _analogColors: Color[] 
+  private _polygonColors: Color[]
+  private _polyhedronColors: Color[]
+  private _complementaryTwiceColors: Color[]
+  private _complementaryDivideColors: Color[]
+  private _complementaryColors: Color[]
+
   constructor(color?: string | IRGB | IRGBA | IHSL | IHSLA ) {
     if (!color){
       return 
