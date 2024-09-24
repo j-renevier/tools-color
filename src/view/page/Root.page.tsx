@@ -19,6 +19,8 @@ interface IValues {
   alpha: ColorValue;
   hexa: ColorValue; 
   numberOfColors: ColorValue; 
+  mainColorPosition: ColorValue; 
+  interval: ColorValue; 
   rgbaStringCSS: ColorValue;
 }
 
@@ -35,6 +37,8 @@ const RootPage = () => {
     alpha: { value: color.alpha.get, setValue: (v: IValues['alpha']['value']) => setValues((prev: IValues) => ({ ...prev, alpha: { value: v, setValue: prev.alpha.setValue } })) },
     hexa: { value: color.hexa, setValue: (v: IValues['hexa']['value']) => setValues((prev: IValues) => ({ ...prev, hexa: { value: v, setValue: prev.hexa.setValue } })) },
     numberOfColors: { value: color.numberOfColors, setValue: (v: IValues['numberOfColors']['value']) => setValues((prev: IValues) => ({ ...prev, numberOfColors: { value: v, setValue: prev.numberOfColors.setValue } })) },
+    mainColorPosition: { value: color.mainColorPosition, setValue: (v: IValues['mainColorPosition']['value']) => setValues((prev: IValues) => ({ ...prev, mainColorPosition: { value: v, setValue: prev.mainColorPosition.setValue } })) },
+    interval: { value: color.interval, setValue: (v: IValues['interval']['value']) => setValues((prev: IValues) => ({ ...prev, interval: { value: v, setValue: prev.interval.setValue } })) },
     rgbaStringCSS: { value: color.rgbaStringCSS, setValue: (v: IValues['rgbaStringCSS']['value']) => setValues((prev: IValues) => ({ ...prev, rgbaStringCSS: { value: v, setValue: prev.rgbaStringCSS.setValue } })) }
   });
 
@@ -68,8 +72,21 @@ const RootPage = () => {
     const valuesName = value as keyof typeof values
     const currentValue = values[valuesName].value;
     if (typeof currentValue === 'number') {
-      color[colorName] = currentValue - 1;
-      updateValues();
+      if (['alpha', 'interval'].includes(colorName)){
+        color[colorName] = currentValue - 0.01;
+        if(['interval'].includes(colorName)){
+          values[colorName].setValue(color[colorName]);
+        } else {
+          updateValues()
+        }
+      } else {
+        color[colorName] = currentValue - 1;
+        if(['numberOfColors', 'mainColorPosition'].includes(colorName)){
+          values[colorName].setValue(color[colorName]);
+        } else {
+          updateValues()
+        }
+      }
     }
   }
 
@@ -78,8 +95,21 @@ const RootPage = () => {
     const valuesName = value as keyof typeof values
     const currentValue = values[valuesName].value;
     if (typeof currentValue === 'number') {
-      color[colorName] = currentValue + 1;
-      updateValues();
+      if (['alpha', 'interval'].includes(colorName)){
+        color[colorName] = currentValue + 0.01;
+        if(['interval'].includes(colorName)){
+          values[colorName].setValue(color[colorName]);
+        } else {
+          updateValues()
+        }
+      } else {
+        color[colorName] = currentValue + 1;
+        if(['numberOfColors', 'mainColorPosition'].includes(colorName)){
+          values[colorName].setValue(color[colorName]);
+        } else {
+          updateValues()
+        }
+      }
     }
   }
 
@@ -89,7 +119,7 @@ const RootPage = () => {
     const currentValue = values[valuesName].value;
     if (typeof currentValue === 'number') {
       color[colorName] = currentValue - 0.01;
-      updateValues();
+      updateValues()
     }
   }
 
@@ -99,21 +129,29 @@ const RootPage = () => {
     const currentValue = values[valuesName].value;
     if (typeof currentValue === 'number') {
       color[colorName] = currentValue + 0.01;
-      updateValues();
+      updateValues()
     }
   }
 
   const handleReset = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, valueName:string, value:number) => {
     const colorName = valueName as keyof Color
     color[colorName] = value;
-    updateValues();
+    if(['numberOfColors', 'mainColorPosition', 'interval'].includes(colorName)){
+      values[colorName].setValue(color[colorName]);
+    } else {
+      updateValues()
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value !== ''){
       const name = event.target.name as keyof Color
       color[name] = Number(event.target.value)
-      updateValues()
+      if(['numberOfColors', 'mainColorPosition', 'interval'].includes(name)){
+        values[name].setValue(color[name]);
+      } else {
+        updateValues()
+      }
     }
   }
   
@@ -269,13 +307,43 @@ const RootPage = () => {
                     </div>
                     <div className="value numberOfColors">
                       <button className="button decrement" onClick={(event)=>handleDecrement(event, 'numberOfColors')}><Minus/></button>
-                      <input type="number" className="color_picker number_picker numberOfColors" id="inputNumberNumberOfColors" name="numberOfColors" min="0" minLength={0} max="10" step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                      <input type="number" className="color_picker number_picker numberOfColors" id="inputNumberNumberOfColors" name="numberOfColors" min="1" minLength={1} step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
                       <button className="button increment" onClick={(event)=>handleIncrement(event, 'numberOfColors')}><Plus/></button>
                     </div>
-                    <button className="min button" onClick={(event)=>handleReset(event, 'numberOfColors', 0)}>0</button>
-                    <input type="range" className="color_picker range_picker numberOfColors" id="inputRangeNumberOfColors" name="numberOfColors" min="0" max="10" step="1"  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
-                    <button className="max button" onClick={(event)=>handleReset(event, 'numberOfColors', 10)}>10</button>
+                    <button className="min button" onClick={(event)=>handleReset(event, 'numberOfColors', 1)}>1</button>
+                    <input type="range" className="color_picker range_picker numberOfColors" id="inputRangeNumberOfColors" name="numberOfColors" min="1" step="1"  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                    {/* <button className="max button" onClick={(event)=>handleReset(event, 'numberOfColors', 10)}>10</button> */}
                   </label>
+
+                  <label htmlFor="mainColorPosition" className="param mainColorPosition">
+                    <div className="value_name_numbers">
+                      <h4>Position de la couleur principale</h4>
+                    </div>
+                    <div className="value mainColorPosition">
+                      <button className="button decrement" onClick={(event)=>handleDecrement(event, 'mainColorPosition')}><Minus/></button>
+                      <input type="number" className="color_picker number_picker mainColorPosition" id="inputNumberMainColorPosition" name="mainColorPosition" min="1" minLength={1} step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.mainColorPosition.value} onChange={(event)=>{handleChange(event)}}/>
+                      <button className="button increment" onClick={(event)=>handleIncrement(event, 'mainColorPosition')}><Plus/></button>
+                    </div>
+                    <button className="min button" onClick={(event)=>handleReset(event, 'mainColorPosition', 1)}>1</button>
+                    <input type="range" className="color_picker range_picker mainColorPosition" id="inputRangeMainColorPosition" name="mainColorPosition" min="1" step="1"  value={values.mainColorPosition.value} onChange={(event)=>{handleChange(event)}}/>
+                    {/* <button className="max button" onClick={(event)=>handleReset(event, 'mainColorPosition', 10)}>10</button> */}
+                  </label>
+
+                  <label htmlFor="interval" className="param interval">
+                    <div className="value_name_numbers">
+                      <h4>Ecartement</h4>
+                    </div>
+                    <div className="value interval">
+                      <button className="button decrement" onClick={(event)=>handleDecrement(event, 'interval')}><Minus/></button>
+                      <input type="number" className="color_picker number_picker interval" id="inputNumberInterval" name="interval" min="0" max="1" minLength={1} step="0.01" onKeyDown={(event)=>handleKeyDown(event)}  value={values.interval.value} onChange={(event)=>{handleChange(event)}}/>
+                      <button className="button increment" onClick={(event)=>handleIncrement(event, 'interval')}><Plus/></button>
+                    </div>
+                    <button className="min button" onClick={(event)=>handleReset(event, 'interval', 0)}>0</button>
+                    <input type="range" className="color_picker range_picker interval" id="inputRangeIntervals" name="interval" min="0" max="1" step="0.01"  value={values.interval.value} onChange={(event)=>{handleChange(event)}}/>
+                    <button className="max button" onClick={(event)=>handleReset(event, 'interval', 1)}>1</button>
+                  </label>
+
+                  
                 </div>
 
 

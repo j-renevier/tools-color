@@ -27,6 +27,8 @@ export class Color {
   // private _complementaryColors: Color[];
 
   public set numberOfColors(value: number) {
+    if (value < 1) return 
+    if (value > 100 ) return 
     this._numberOfColors = value 
   }
   public get numberOfColors(): number {
@@ -34,15 +36,18 @@ export class Color {
   }
   
   public set mainColorPosition(value: number) {
+    if (value < 1) return 
+    if (value > 100 ) return 
     this._mainColorPosition = value 
   }
   public get mainColorPosition(): number {
     return this._mainColorPosition;
   } 
 
-  public set interval(value: Frac) {
-    this._interval = value 
+  public set interval(value: number) {
+    this._interval = new Frac(value);
   }
+
   public get interval(): Frac {
     return this._interval;
   }
