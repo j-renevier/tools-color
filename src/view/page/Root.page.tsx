@@ -17,7 +17,8 @@ interface IValues {
   saturation: ColorValue;
   light: ColorValue;
   alpha: ColorValue;
-  hexa: ColorValue;
+  hexa: ColorValue; 
+  numberOfColors: ColorValue; 
   rgbaStringCSS: ColorValue;
 }
 
@@ -33,6 +34,7 @@ const RootPage = () => {
     light: { value: color.light.get, setValue: (v: IValues['light']['value']) => setValues((prev: IValues) => ({ ...prev, light: { value: v, setValue: prev.light.setValue } })) },
     alpha: { value: color.alpha.get, setValue: (v: IValues['alpha']['value']) => setValues((prev: IValues) => ({ ...prev, alpha: { value: v, setValue: prev.alpha.setValue } })) },
     hexa: { value: color.hexa, setValue: (v: IValues['hexa']['value']) => setValues((prev: IValues) => ({ ...prev, hexa: { value: v, setValue: prev.hexa.setValue } })) },
+    numberOfColors: { value: color.numberOfColors, setValue: (v: IValues['numberOfColors']['value']) => setValues((prev: IValues) => ({ ...prev, numberOfColors: { value: v, setValue: prev.numberOfColors.setValue } })) },
     rgbaStringCSS: { value: color.rgbaStringCSS, setValue: (v: IValues['rgbaStringCSS']['value']) => setValues((prev: IValues) => ({ ...prev, rgbaStringCSS: { value: v, setValue: prev.rgbaStringCSS.setValue } })) }
   });
 
@@ -162,7 +164,7 @@ const RootPage = () => {
                       <button className="button increment" onClick={(event)=>handleIncrement(event, 'red')}><Plus/></button>
                     </div>
                     <button className="min button" onClick={(event)=>handleReset(event, 'red', 0)}>0</button>
-                    <input type="range" className="color_picker range_picker red gradient-border" id="inputRangeRed" name="red" min="0" max="255" step="1"  value={values.red.value} onChange={(event)=>{handleChange(event)}}/>
+                    <input type="range" className="color_picker range_picker red" id="inputRangeRed" name="red" min="0" max="255" step="1"  value={values.red.value} onChange={(event)=>{handleChange(event)}}/>
                     <button className="max button" onClick={(event)=>handleReset(event, 'red', 255)}>255</button>
                   </label>
                   
@@ -260,11 +262,24 @@ const RootPage = () => {
                 <CercleChromatique colors={[color, new Color({r: 255, g: 0, b: 0}), new Color({r: 0, g: 0, b: 0})]}/>
               </div>
               <div className="main_color-content color_gradient">
-                {/*<div>
-                  <label>Position</label>
-                  <input type="number" />
+                <div className="parametre_gradient">
+                  <label htmlFor="numberOfColors" className="param numberOfColors">
+                    <div className="value_name_numbers">
+                      <h4>Nombre de couleurs</h4>
+                    </div>
+                    <div className="value numberOfColors">
+                      <button className="button decrement" onClick={(event)=>handleDecrement(event, 'numberOfColors')}><Minus/></button>
+                      <input type="number" className="color_picker number_picker numberOfColors" id="inputNumberNumberOfColors" name="numberOfColors" min="0" minLength={0} max="10" step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                      <button className="button increment" onClick={(event)=>handleIncrement(event, 'numberOfColors')}><Plus/></button>
+                    </div>
+                    <button className="min button" onClick={(event)=>handleReset(event, 'numberOfColors', 0)}>0</button>
+                    <input type="range" className="color_picker range_picker numberOfColors" id="inputRangeNumberOfColors" name="numberOfColors" min="0" max="10" step="1"  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                    <button className="max button" onClick={(event)=>handleReset(event, 'numberOfColors', 10)}>10</button>
+                  </label>
                 </div>
-                <div className="complementary">
+
+
+                {/*<div className="complementary">
                   <ul>
                     {color.complementaryColors.map((color, index) => (
                       <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
@@ -310,14 +325,15 @@ const RootPage = () => {
                   </ul>
                 </div> */}
                 <div className="analog">
-                  <ul>
+                  <ul className="display_gradient">
                     {color.analogColors.map((color, index) => (
                       <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
-                        {color.rgbaStringCSS}
+                        <span>{color.rgbaStringCSS}</span>
+                        <span>{color.hslStringCSS}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="display_gradient" style={{ 
+                  <div className="show_gradient" style={{ 
                       background: `linear-gradient(90deg,${color.analogColors.map(c => c.rgbaStringCSS).join(', ')})`
                     }}>
                   </div>
