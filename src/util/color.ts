@@ -44,11 +44,12 @@ export class Color {
     return this._mainColorPosition;
   } 
 
-  public set interval(value: number) {
-    this._interval = new Frac(value);
+
+  public set interval(value:number) {
+    this._interval.set = value;
   }
 
-  public get interval(): Frac {
+  public get interval():Frac {
     return this._interval;
   }
 

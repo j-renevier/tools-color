@@ -108,11 +108,7 @@ export class Frac {
   }
 
   public set set(newValue: number) {
-    try {
-      this.value = this.validate(newValue);
-    } catch(e){
-      return
-    }
+    this.value = this.validate(newValue);
   }
 }
 

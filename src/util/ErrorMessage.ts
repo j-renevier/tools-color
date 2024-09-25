@@ -14,6 +14,7 @@ export class ErrorMessage {
   public static colorGetSaturation = 'COLOR GET_SATURATION'
 
   // SETTER
+  public static setInterval = 'SET_INTERVAL'
   public static colorSetRed = 'COLOR SET_RED'
   public static colorSetHue = 'COLOR SET_HUE'
   public static colorSetHexa = 'COLOR SET_HEXA'
