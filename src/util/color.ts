@@ -1,5 +1,6 @@
 import { Callback, Frac, Hue, IHSL, IHSLA, IRGB, IRGBA, isIHSL, isIHSLA, isIRGB, isIRGBA, Octet, Perc, TFrac, TOctet } from "./colorType";
 import { ErrorMessage } from "./ErrorMessage";
+import { floor } from "./math";
 
 // 0, 0, 0 = 0, 0, 0
 // 255, 255, 255 = 0, 0, 100
@@ -27,7 +28,7 @@ export class Color {
   // private _complementaryColors: Color[];
 
   public set numberOfColors(value: number) {
-    if (value < 1) return 
+    if (value < 2) return 
     if (value > 100 ) return 
     this._numberOfColors = value 
   }
@@ -53,13 +54,14 @@ export class Color {
     return this._interval;
   }
 
-
-
   public calcAnalogColors(): Color[] {
     let analogColors: Color[] = [];
+    const degTot = this._numberOfColors > 5 ? 360 : 180
+    const deg = ( degTot / this._numberOfColors ) * this._interval.get
+    const startDeg = this._hue.get - ((this._mainColorPosition - 1) * deg )
     for (let i = 0; i < this._numberOfColors; i++) {
       let hsl: IHSL = {
-        h: new Hue(this._hue.get + i * 30).get,
+        h: new Hue( Math.floor(startDeg + i * deg)).get,
         s: this._saturation.get,
         l: this._light.get
       };
@@ -72,9 +74,39 @@ export class Color {
     return this.calcAnalogColors();
   }
 
+  public get complementaryColors(): Color[] {
+    return this.calcComplementaryColors();
+  }
 
+  public calcComplementaryColors(): Color[] {
+    let complementaryColors: Color[] = []
 
-
+    if (this._numberOfColors % 2 === 0){
+      const deg = 360 / this._numberOfColors;
+      const startDeg = this._hue.get - ((this._mainColorPosition - 1) * deg )
+      for (let i = 0; i < this._numberOfColors; i++) {
+        let hsl: IHSL = {
+          h: new Hue( Math.floor(startDeg + i * deg)).get,
+          s: this._saturation.get,
+          l: this._light.get
+        };
+        complementaryColors.push(new Color(hsl));
+      }
+    } else {
+      const degTot = 360
+      const deg = ( degTot / this._numberOfColors ) * this._interval.get
+      const startDeg = (this._hue.get + 180) - ((this._mainColorPosition - 1) * deg )
+      for (let i = 0; i < this._numberOfColors; i++) {
+        let hsl: IHSL = {
+          h: new Hue( Math.floor(startDeg + i * deg)).get,
+          s: this._saturation.get,
+          l: this._light.get
+        };
+        complementaryColors.push(new Color(hsl));
+      }
+    }
+    return complementaryColors;
+  }
 
 
   constructor(color?: string | IRGB | IRGBA | IHSL | IHSLA ) {

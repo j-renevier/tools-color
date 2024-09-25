@@ -148,10 +148,10 @@ const RootPage = () => {
     if (event.target.value !== ''){
       const name = event.target.name as keyof Color
       color[name] = Number(event.target.value)
-      if(['numberOfColors', 'mainColorPosition', 'interval'].includes(name)){
+      if(['numberOfColors', 'mainColorPosition'].includes(name)){
         values[name].setValue(color[name]);
-      } else if(['interval'].includes(colorName)){
-        values[colorName].setValue(color[colorName].get);
+      } else if(['interval'].includes(name)){
+        values[name].setValue(color[name].get);
       }else {
         updateValues()
       }
@@ -310,11 +310,11 @@ const RootPage = () => {
                     </div>
                     <div className="value numberOfColors">
                       <button className="button decrement" onClick={(event)=>handleDecrement(event, 'numberOfColors')}><Minus/></button>
-                      <input type="number" className="color_picker number_picker numberOfColors" id="inputNumberNumberOfColors" name="numberOfColors" min="1" minLength={1} step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                      <input type="number" className="color_picker number_picker numberOfColors" id="inputNumberNumberOfColors" name="numberOfColors" min="2" minLength={1} step="1" onKeyDown={(event)=>handleKeyDown(event)}  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
                       <button className="button increment" onClick={(event)=>handleIncrement(event, 'numberOfColors')}><Plus/></button>
                     </div>
-                    <button className="min button" onClick={(event)=>handleReset(event, 'numberOfColors', 1)}>1</button>
-                    <input type="range" className="color_picker range_picker numberOfColors" id="inputRangeNumberOfColors" name="numberOfColors" min="1" step="1"  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
+                    <button className="min button" onClick={(event)=>handleReset(event, 'numberOfColors', 2)}>2</button>
+                    <input type="range" className="color_picker range_picker numberOfColors" id="inputRangeNumberOfColors" name="numberOfColors" min="2" step="1"  value={values.numberOfColors.value} onChange={(event)=>{handleChange(event)}}/>
                     {/* <button className="max button" onClick={(event)=>handleReset(event, 'numberOfColors', 10)}>10</button> */}
                   </label>
 
@@ -406,6 +406,20 @@ const RootPage = () => {
                   </ul>
                   <div className="show_gradient" style={{ 
                       background: `linear-gradient(90deg,${color.analogColors.map(c => c.rgbaStringCSS).join(', ')})`
+                    }}>
+                  </div>
+                </div>
+                <div className="complementary">
+                  <ul className="display_gradient">
+                    {color.complementaryColors.map((color, index) => (
+                      <li key={index} style={{ backgroundColor: color.rgbaStringCSS }}>
+                        <span>{color.rgbaStringCSS}</span>
+                        <span>{color.hslStringCSS}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="show_gradient" style={{ 
+                      background: `linear-gradient(90deg,${color.complementaryColors.map(c => c.rgbaStringCSS).join(', ')})`
                     }}>
                   </div>
                 </div>
